@@ -1,6 +1,8 @@
 package com.concretepage.controller;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,13 +26,19 @@ public class ArticleController {
 	@Autowired
 	private IArticleService articleService;
 	@GetMapping("article/{id}")
-	public ResponseEntity<Article> getArticleById(@PathVariable("id") Integer id) {
-		Article article = articleService.getArticleById(id);
+	public ResponseEntity<Article> getArticleById(@PathVariable("id") Integer id, HttpServletRequest request) {
+		Article article;
+		if (!request.isUserInRole(id.toString()))
+			return new ResponseEntity<Article>(HttpStatus.FORBIDDEN);
+		article = articleService.getArticleById(id);
 		return new ResponseEntity<Article>(article, HttpStatus.OK);
 	}
 	@GetMapping("articles")
-	public ResponseEntity<List<Article>> getAllArticles() {
-		List<Article> list = articleService.getAllArticles();
+	public ResponseEntity<List<Article>> getAllArticles(HttpServletRequest request) {
+		List<Article> list;
+		if (!request.isUserInRole("ADMIN"))
+			return new ResponseEntity<List<Article>>(HttpStatus.FORBIDDEN);
+		list = articleService.getAllArticles();
 		return new ResponseEntity<List<Article>>(list, HttpStatus.OK);
 	}
 	@PostMapping("article")
