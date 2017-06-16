@@ -9,71 +9,70 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.concretepage.entity.Article;
+import com.concretepage.entity.Member;
 
 public class RestClientUtil {
-    public void getArticleByIdDemo() {
+    public void getMemberByIdDemo() {
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/article/{id}";
+	    String url = "http://localhost:8080/user/member/{id}";
         HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
-        ResponseEntity<Article> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Article.class, 1);
-        Article article = responseEntity.getBody();
-        System.out.println("Id:"+article.getArticleId()+", Title:"+article.getTitle()
-                 +", Category:"+article.getCategory());      
+        ResponseEntity<Member> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Member.class, 1);
+        Member member = responseEntity.getBody();
+        System.out.println("Id:"+member.getMemberId());      
     }
-	public void getAllArticlesDemo() {
+	public void getAllMemberDemo() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/articles";
+	    String url = "http://localhost:8080/user/members";
         HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
-        ResponseEntity<Article[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Article[].class);
-        Article[] articles = responseEntity.getBody();
-        for(Article article : articles) {
-              System.out.println("Id:"+article.getArticleId()+", Title:"+article.getTitle()
-                      +", Category: "+article.getCategory());
+        ResponseEntity<Member[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Member[].class);
+        Member[] members = responseEntity.getBody();
+        for(Member member : members) {
+              System.out.println("Id:"+member.getMemberId());
         }
     }
-    public void addArticleDemo() {
+    public void addMemberDemo() {
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/article";
-	    Article objArticle = new Article();
-	    objArticle.setTitle("Spring REST Security using Hibernate");
-	    objArticle.setCategory("Spring");
-        HttpEntity<Article> requestEntity = new HttpEntity<Article>(objArticle, headers);
+	    String url = "http://localhost:8080/user/member";
+	    Member objMember = new Member();
+	    objMember.setFirstName("Test");
+	    objMember.setLastName("Test");
+	    objMember.setEmail("test@example.com");
+	    objMember.setEnabled(true);
+	    objMember.setPassword("test");
+        HttpEntity<Member> requestEntity = new HttpEntity<Member>(objMember, headers);
         URI uri = restTemplate.postForLocation(url, requestEntity);
         System.out.println(uri.getPath());    	
     }
-    public void updateArticleDemo() {
+    public void updateMemberDemo() {
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/article";
-	    Article objArticle = new Article();
-	    objArticle.setArticleId(1);
-	    objArticle.setTitle("Update:Java Concurrency");
-	    objArticle.setCategory("Java");
-        HttpEntity<Article> requestEntity = new HttpEntity<Article>(objArticle, headers);
+	    String url = "http://localhost:8080/user/member";
+	    Member objMember = new Member();
+	    objMember.setMemberId(1);
+        HttpEntity<Member> requestEntity = new HttpEntity<Member>(objMember, headers);
         restTemplate.put(url, requestEntity);
     }
-    public void deleteArticleDemo() {
+    public void deleteMemberDemo() {
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/article/{id}";
-        HttpEntity<Article> requestEntity = new HttpEntity<Article>(headers);
+	    String url = "http://localhost:8080/user/member/{id}";
+        HttpEntity<Member> requestEntity = new HttpEntity<Member>(headers);
         restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Void.class, 4);        
     }
     public static void main(String args[]) {
     	RestClientUtil util = new RestClientUtil();
-        //util.getArticleByIdDemo();
-    	util.getAllArticlesDemo();
-    	//util.addArticleDemo();
-    	//util.updateArticleDemo();
-    	//util.deleteArticleDemo();
+        //util.getMemberByIdDemo();
+    	util.getAllMembersDemo();
+    	//util.addMemberDemo();
+    	//util.updateMemberDemo();
+    	//util.deleteMemberDemo();
     }    
 }
