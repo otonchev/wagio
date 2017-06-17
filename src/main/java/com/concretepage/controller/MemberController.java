@@ -28,7 +28,7 @@ public class MemberController {
 	@GetMapping("member/{id}")
 	public ResponseEntity<Member> getMemberById(@PathVariable("id") Integer id, HttpServletRequest request) {
 		Member member;
-		if (!request.isUserInRole(id.toString()))
+		if (!request.isUserInRole("USER"))
 			return new ResponseEntity<Member>(HttpStatus.FORBIDDEN);
 		member = memberService.getMemberById(id);
 		return new ResponseEntity<Member>(member, HttpStatus.OK);

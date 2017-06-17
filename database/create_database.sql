@@ -22,11 +22,16 @@ CREATE TABLE IF NOT EXISTS `member_roles` (
   CONSTRAINT fk_member_id FOREIGN KEY (`member_id`) REFERENCES `members` (`member_id`));
 
 INSERT INTO `members` (`member_id`, `first_name`, `last_name`, `email`, `password`, `parent_id`, `enabled`) VALUES
-	(1, 'John', 'Bell', 'john@gmail.com', '$2a$04$5nsfkmBeVSlYemNgYCLrJuv7es5szUiSOaE6f3u7PkIrUqOPU74rS', 0, 'true'),
-	(2, 'Bob', 'Funk', 'bob@gmail.com', '$2a$04$5nsfkmBeVSlYemNgYCLrJuv7es5szUiSOaE6f3u7PkIrUqOPU74rS', 1, 'true'),
-	(3, 'Anton', 'Smith', 'anton@gmail.com', '$2a$04$5nsfkmBeVSlYemNgYCLrJuv7es5szUiSOaE6f3u7PkIrUqOPU74rS', 1, 'true');
+	(1, 'John', 'Bell', 'john@gmail.com', '$2a$04$5nsfkmBeVSlYemNgYCLrJuv7es5szUiSOaE6f3u7PkIrUqOPU74rS', 0, true),
+	(2, 'Bob', 'Funk', 'bob@gmail.com', '$2a$04$5nsfkmBeVSlYemNgYCLrJuv7es5szUiSOaE6f3u7PkIrUqOPU74rS', 1, true),
+	(3, 'Anton', 'Smith', 'anton@gmail.com', '$2a$04$5nsfkmBeVSlYemNgYCLrJuv7es5szUiSOaE6f3u7PkIrUqOPU74rS', 1, true),
+	(4, 'Daniel', 'Wilson', 'daniel@gmail.com', '$2a$04$5nsfkmBeVSlYemNgYCLrJuv7es5szUiSOaE6f3u7PkIrUqOPU74rS', 2, true),
+	(5, 'Alex', 'Alex', 'daniel@gmail.com', '$2a$04$5nsfkmBeVSlYemNgYCLrJuv7es5szUiSOaE6f3u7PkIrUqOPU74rS', 3, true);
 
 INSERT INTO `member_roles` (`member_role_id`, `member_id`, `role`) VALUES
 	(1, 1, "ROLE_ADMIN"),
         (2, 2, "ROLE_USER"),
-        (3, 3, "ROLE_USER");
+	(3, 2, "ROLE_MANAGER"),
+        (4, 3, "ROLE_USER"),
+	(5, 4, "ROLE_USER"),
+	(6, 5, "ROLE_USER");

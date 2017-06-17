@@ -50,7 +50,7 @@ public class Member implements Serializable {
 		return lastName;
 	}
 
-	public void setLasttName(String lastName) {
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 

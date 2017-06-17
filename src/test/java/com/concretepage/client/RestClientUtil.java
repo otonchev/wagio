@@ -68,9 +68,9 @@ public class RestClientUtil {
         restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Void.class, 4);        
     }
     public static void main(String args[]) {
-    	RestClientUtil util = new RestClientUtil();
+    	//RestClientUtil util = new RestClientUtil();
         //util.getMemberByIdDemo();
-    	util.getAllMembersDemo();
+    	//util.getAllMembersDemo();
     	//util.addMemberDemo();
     	//util.updateMemberDemo();
     	//util.deleteMemberDemo();
