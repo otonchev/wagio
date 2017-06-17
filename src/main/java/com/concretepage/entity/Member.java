@@ -15,18 +15,25 @@ public class Member implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	
 	@Column(name = "member_id")
 	private int memberId;
+	
 	@Column(name = "first_name")
 	private String firstName;
+	
 	@Column(name = "last_name")
 	private String lastName;
+	
 	@Column(name = "email")
 	private String email;
+	
 	@Column(name = "parent_id")
 	private int parentId;
+	
 	@Column(name = "enabled")
 	private boolean enabled;
+	
 	@Column(name = "password")
 	private String password;
 
