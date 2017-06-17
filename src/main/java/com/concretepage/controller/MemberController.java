@@ -1,4 +1,5 @@
 package com.concretepage.controller;
+import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,8 +29,22 @@ public class MemberController {
 	@GetMapping("member/{id}")
 	public ResponseEntity<Member> getMemberById(@PathVariable("id") Integer id, HttpServletRequest request) {
 		Member member;
-		if (!request.isUserInRole("USER") && !request.isUserInRole("ADMIN"))
+		
+		boolean user = request.isUserInRole("USER");
+		boolean admin = request.isUserInRole("ADMIN");
+		
+		if (!user && !admin)
 			return new ResponseEntity<Member>(HttpStatus.FORBIDDEN);
+		
+		if (!admin) {
+			Principal principal = request.getUserPrincipal();
+			String email = principal.getName();
+			member = memberService.getMemberByEmail(email);
+			
+			if (id != member.getMemberId())
+				return new ResponseEntity<Member>(HttpStatus.FORBIDDEN);
+		}
+		
 		member = memberService.getMemberById(id);
 		return new ResponseEntity<Member>(member, HttpStatus.OK);
 	}

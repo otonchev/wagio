@@ -15,7 +15,12 @@ public class MemberService implements IMemberService {
 	public Member getMemberById(int memberId) {
 		Member obj = memberDAO.getMemberById(memberId);
 		return obj;
-	}	
+	}
+	@Override
+	public Member getMemberByEmail(String email) {
+		Member obj = memberDAO.getMemberByEmail(email);
+		return obj;
+	}
 	@Override
 	public List<Member> getAllMembers(){
 		return memberDAO.getAllMembers();
