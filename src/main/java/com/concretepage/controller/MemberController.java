@@ -25,7 +25,7 @@ import com.concretepage.service.IMemberService;
 public class MemberController {
 	@Autowired
 	private IMemberService memberService;
-	@GetMapping("membder/{id}")
+	@GetMapping("member/{id}")
 	public ResponseEntity<Member> getMemberById(@PathVariable("id") Integer id, HttpServletRequest request) {
 		Member member;
 		if (!request.isUserInRole(id.toString()))
@@ -34,7 +34,7 @@ public class MemberController {
 		return new ResponseEntity<Member>(member, HttpStatus.OK);
 	}
 	@GetMapping("members")
-	public ResponseEntity<List<Mamber>> getAllMembers(HttpServletRequest request) {
+	public ResponseEntity<List<Member>> getAllMembers(HttpServletRequest request) {
 		List<Member> list;
 		if (!request.isUserInRole("ADMIN"))
 			return new ResponseEntity<List<Member>>(HttpStatus.FORBIDDEN);
