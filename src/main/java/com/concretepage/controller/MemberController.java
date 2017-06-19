@@ -59,7 +59,7 @@ public class MemberController {
 			String email = principal.getName();
 			member = memberService.getMemberByEmail(email);
 			
-			if (memberService.isMemberParentOf (member.getMemberId(), id))
+			if (memberService.isMemberParentOf (member.getMemberId(), id.intValue()))
 				granted = true;
 		}
 		
