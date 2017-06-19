@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,13 +20,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
 
+	@Value("${spring.queries.users-query}")
+	private String usersQuery;
+	
+	@Value("${spring.queries.roles-query}")
+	private String rolesQuery;
+	
 	@Autowired
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
 		
 		auth.jdbcAuthentication().dataSource(dataSource)
 			.passwordEncoder(new BCryptPasswordEncoder())
-			.usersByUsernameQuery("select email, password, enabled from members where email=?")
-			.authoritiesByUsernameQuery("select '?', role from member_roles where member_id=(select member_id from members where email=?)");
+			.usersByUsernameQuery(usersQuery)
+			.authoritiesByUsernameQuery(rolesQuery);
 	}
 
 	@Override

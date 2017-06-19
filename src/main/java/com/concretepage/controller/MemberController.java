@@ -94,9 +94,21 @@ public class MemberController {
 	@GetMapping("members")
 	public ResponseEntity<List<Member>> getAllMembers(HttpServletRequest request) {
 		List<Member> list;
-		if (!request.isUserInRole("ADMIN"))
-			return new ResponseEntity<List<Member>>(HttpStatus.FORBIDDEN);
-		list = memberService.getAllMembers();
+		
+		boolean manager = request.isUserInRole("MANAGER");
+		boolean admin = request.isUserInRole("ADMIN");
+		
+		if (!admin) {
+			if (manager) {
+				Principal principal = request.getUserPrincipal();
+				String email = principal.getName();
+				Member member = memberService.getMemberByEmail(email);
+				
+				list = memberService.getTeamMembersById(member.getMemberId());
+			} else
+				return new ResponseEntity<List<Member>>(HttpStatus.FORBIDDEN);
+		} else
+			list = memberService.getAllMembers();
 		return new ResponseEntity<List<Member>>(list, HttpStatus.OK);
 	}
 	@PostMapping("member")

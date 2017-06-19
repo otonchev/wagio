@@ -1,6 +1,7 @@
 package com.concretepage.entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name = "members")
@@ -29,11 +35,14 @@ public class Member implements Serializable {
 	private boolean enabled;
 	@Column(name = "password")
 	private String password;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "member_roles", joinColumns = @JoinColumn(name = "member_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
 
 	public int getMemberId() {
 		return memberId;
 	}
-
+ 
 	public void setMemberId(int memberId) {
 		this.memberId = memberId;
 	}
@@ -84,5 +93,13 @@ public class Member implements Serializable {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 }
