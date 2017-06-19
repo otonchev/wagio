@@ -26,27 +26,70 @@ import com.concretepage.service.IMemberService;
 public class MemberController {
 	@Autowired
 	private IMemberService memberService;
+	@GetMapping("logged")
+	public ResponseEntity<Member> getMemberLoggedIn(HttpServletRequest request) {
+		Member member;
+		Principal principal = request.getUserPrincipal();
+		String email = principal.getName();
+		member = memberService.getMemberByEmail(email);
+		return new ResponseEntity<Member>(member, HttpStatus.OK);
+	}
 	@GetMapping("member/{id}")
 	public ResponseEntity<Member> getMemberById(@PathVariable("id") Integer id, HttpServletRequest request) {
 		Member member;
 		
 		boolean user = request.isUserInRole("USER");
 		boolean admin = request.isUserInRole("ADMIN");
+		boolean manager = request.isUserInRole("MANAGER");
 		
-		if (!user && !admin)
-			return new ResponseEntity<Member>(HttpStatus.FORBIDDEN);
+		boolean granted = admin;
 		
-		if (!admin) {
+		if (!granted && user) {
 			Principal principal = request.getUserPrincipal();
 			String email = principal.getName();
 			member = memberService.getMemberByEmail(email);
 			
-			if (id != member.getMemberId())
-				return new ResponseEntity<Member>(HttpStatus.FORBIDDEN);
+			if (id == member.getMemberId()) {
+				granted = true;
+			}
 		}
+		
+		if (!granted && manager) {
+			Principal principal = request.getUserPrincipal();
+			String email = principal.getName();
+			member = memberService.getMemberByEmail(email);
+			
+			if (memberService.isMemberParentOf (member.getMemberId(), id))
+				granted = true;
+		}
+		
+		if (!granted)
+				return new ResponseEntity<Member>(HttpStatus.FORBIDDEN);
 		
 		member = memberService.getMemberById(id);
 		return new ResponseEntity<Member>(member, HttpStatus.OK);
+	}
+	@GetMapping("member/{id}/team")
+	public ResponseEntity<List<Member>> getTeamMembersById(@PathVariable("id") Integer id, HttpServletRequest request) {
+		List<Member> list;
+
+		boolean manager = request.isUserInRole("MANAGER");
+		boolean admin = request.isUserInRole("ADMIN");
+		
+		if (!admin) {
+			if (manager) {
+				Principal principal = request.getUserPrincipal();
+				String email = principal.getName();
+				Member member = memberService.getMemberByEmail(email);
+			
+				if (id != member.getMemberId())
+					return new ResponseEntity<List<Member>>(HttpStatus.FORBIDDEN);
+			} else
+				return new ResponseEntity<List<Member>>(HttpStatus.FORBIDDEN);
+		}
+		
+		list = memberService.getTeamMembersById(id);
+		return new ResponseEntity<List<Member>>(list, HttpStatus.OK);
 	}
 	@GetMapping("members")
 	public ResponseEntity<List<Member>> getAllMembers(HttpServletRequest request) {

@@ -3,7 +3,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.concretepage.entity.Member;
+
 @Transactional
 @Repository
 public class MemberDAO implements IMemberDAO {
@@ -38,6 +38,12 @@ public class MemberDAO implements IMemberDAO {
 		Member member = (Member)criteria.add(Restrictions.eq("email", email))
 				.uniqueResult();
 		return member;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Member> getTeamMembersById(int memberId) {
+		String hql = "FROM Member as mbr WHERE mbr.parentId = ?";
+		return (List<Member>) entityManager.createQuery(hql).setParameter(1, memberId).getResultList();
 	}
 	@SuppressWarnings("unchecked")
 	@Override
@@ -67,5 +73,12 @@ public class MemberDAO implements IMemberDAO {
 				.getResultList().size();
 		              //.setParameter(2, category).getResultList().size();
 		return count > 0 ? true : false;
+	}
+	@Override
+	public boolean isMemberParentOf(int parentId, int memberId) {
+		String hql = "FROM Member as mbr WHERE mbr.memberId = ? AND mbr.parentId = ?";
+		int count = entityManager.createQuery(hql).setParameter(1, memberId)
+				.setParameter(2, parentId).getResultList().size();
+		return count == 1;
 	}
 }

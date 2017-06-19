@@ -26,6 +26,10 @@ public class MemberService implements IMemberService {
 		return memberDAO.getAllMembers();
 	}
 	@Override
+	public List<Member> getTeamMembersById(int memberId) {
+		return memberDAO.getTeamMembersById(memberId);
+	}
+	@Override
 	public synchronized boolean addMember(Member member){
 		if (memberDAO.memberExists(member.getEmail())) {
 			return false;
@@ -33,6 +37,10 @@ public class MemberService implements IMemberService {
 			memberDAO.addMember(member);
 			return true;
 		}
+	}
+	@Override
+	public boolean isMemberParentOf(int parentId, int memberId) {
+		return memberDAO.isMemberParentOf(parentId, memberId);
 	}
 	@Override
 	public void updateMember(Member member) {
