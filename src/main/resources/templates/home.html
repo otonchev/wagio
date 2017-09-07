@@ -2,8 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
         <title>Spring Security Example</title>
+        <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
+        <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>        
+        <script>
+             //create the homeApp module
+             angular.module('homeApp', []);
+        </script>
     </head>
-    <body>
-        <h1>Welcome!</h1>
+    <body  ng-app="homeApp" ng-init="yourName='Guest'">
+        <h1>Welcome {{ yourName }} !</h1>
     </body>
 </html>
